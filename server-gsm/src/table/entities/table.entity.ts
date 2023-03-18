@@ -1,31 +1,23 @@
-import { Table } from '../../table/entities/table.entity';
+import { User } from '../../auth/entities/auth.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class User {
+export class Table {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  name: string;
+  tableNumber: number;
 
-  @Column({ unique: true })
-  email: string;
-
-  @Column()
-  password: string;
-
-  @OneToMany(() => Table, (table) => table.user)
-  @JoinColumn()
-  tables: Table[];
+  @ManyToOne(() => User, (user) => user.tables, { eager: true })
+  user: User;
 
   @CreateDateColumn({ name: 'created_at', type: 'time with time zone' })
   createdAt: Date;
