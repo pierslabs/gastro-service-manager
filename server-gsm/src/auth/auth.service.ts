@@ -21,7 +21,7 @@ export class AuthService {
   ) {}
 
   async createUser(createAuthDto: CreateAuthDto): Promise<void> {
-    const { name, password, email, updatedAt } = createAuthDto;
+    const { name, password, email } = createAuthDto;
     const findUser = await this.userRepo.findOneBy({ email });
 
     if (findUser) throw new ConflictException('Useralready exist');
@@ -48,10 +48,14 @@ export class AuthService {
 
     if (findUser && (await bcrypt.compare(password, findUser.password))) {
       const payload: IJwtPayload = { email };
-      const accessToken: string = await this.jwtservice.sign(payload);
+      const accessToken: string = this.jwtservice.sign(payload);
       return { accessToken };
     } else {
       throw new UnauthorizedException();
     }
+  }
+
+  async findAllUsers() {
+    return await this.userRepo.find();
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -25,5 +25,10 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   async testJwt(@Req() req: any) {
     console.log(req.user);
+  }
+
+  @Get('/allusers')
+  async findAllUSers() {
+    return this.authService.findAllUsers();
   }
 }
